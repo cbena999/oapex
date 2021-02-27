@@ -1,0 +1,2 @@
+REM INSERTING into ORDSDEMO."TestCollection111"
+SET DEFINE OFF;
