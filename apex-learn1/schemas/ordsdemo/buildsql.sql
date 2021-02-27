@@ -1,5 +1,5 @@
 --------------------------------------------------------
--- Archivo creado  - sábado-febrero-27-2021   a las 1:11 pm.
+-- Archivo creado  - sábado-febrero-27-2021   a las 1:11 pm. 1:20pm
 --------------------------------------------------------
 @C:\working21\OraAPEX\backup-apps\Restore3webapps-apex-1\oraschemas\ordsdemo1\DROPS\DROP.sql
 @C:\working21\OraAPEX\backup-apps\Restore3webapps-apex-1\oraschemas\ordsdemo1\SEQUENCES\DEVORA_LOGGER_SEQUENCE_.sql
