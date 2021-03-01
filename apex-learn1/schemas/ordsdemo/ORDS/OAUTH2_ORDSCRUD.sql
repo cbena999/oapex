@@ -8,3 +8,4 @@ oauth.grant_client_role(p_client_name => 'cdepartments Oauth',
 p_role_name => 'department_rolev2');
 COMMIT;
 END;
+/

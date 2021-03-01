@@ -1,9 +1,6 @@
 --------------------------------------------------------
 -- Archivo creado  - sábado-febrero-27-2021   a las 1:11 pm. 1:20pm
 --------------------------------------------------------
-ALTER SESSION SET CONTAINER=xepdb1;
-
-ALTER SESSION SET CURRENT_SCHEMA = ORDSDEMO;
 
 @DROPS\DROP.sql
 @SEQUENCES\DEVORA_LOGGER_SEQUENCE.sql
@@ -37,7 +34,6 @@ ALTER SESSION SET CURRENT_SCHEMA = ORDSDEMO;
 @INDEXES\SYS_C0012753.sql
 @INDEXES\SYS_C0013080.sql
 @INDEXES\SYS_C0013083.sql
-@PROCEDURES\GET_CLIENT_CREDENTIALS.sql
 @PACKAGES\BLOG_ANGEL.sql
 @PACKAGES\CALLER_CRUDWSDEPT.sql
 @PACKAGES\DEVORA_LOGGER_PACK.sql

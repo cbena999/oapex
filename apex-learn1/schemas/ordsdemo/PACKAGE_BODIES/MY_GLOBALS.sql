@@ -19,7 +19,7 @@ IS
 
       IF OAUTH_DEPT_TOKEN IS NULL THEN
         -- cdepartments Oauth , es el Id del cliente Oauth creado para proteger los Rest de departments 
-        ORDSDEMO.get_client_credentials (pv_name => 'cdepartments Oauth',
+        get_client_credentials (pv_name => 'cdepartments Oauth',
                         pv_id_o => OAUTDEPT_CLIENT_ID, 
                         pv_secret_o => OAUTDEPT_CLIENT_SECRET);
 
@@ -77,8 +77,26 @@ IS
         dbms_scheduler.enable('Call_PUTPOSTDepts_API_JOB');
     end;
 
+PROCEDURE    GET_CLIENT_CREDENTIALS (pv_name IN user_ords_clients.name%TYPE,
+                                                   pv_id_o OUT user_ords_clients.client_id%TYPE,
+                                                   pv_secret_o OUT user_ords_clients.client_secret%TYPE)
+IS
+ CURSOR c_client IS
+   SELECT client_id, client_secret
+   FROM user_ords_clients
+   WHERE NAME = pv_name;
+
+vr_client c_client%ROWTYPE;
+BEGIN
+ OPEN c_client;
+ FETCH c_client
+ INTO vr_client;
+ CLOSE c_client;
+ pv_id_o     := vr_client.client_id;
+ pv_secret_o := vr_client.client_secret;
 END;
 
+END;
 
 /
 
