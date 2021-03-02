@@ -1,0 +1,3 @@
+
+SET DEFINE OFF;
+Insert into USER_VALIDATE (USER_NAME,PASSWORD,STATUS,USER_TYPE) values ('dev02','1234','Y',null);

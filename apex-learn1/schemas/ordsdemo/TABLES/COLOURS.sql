@@ -1,0 +1,12 @@
+--------------------------------------------------------
+--  DDL for Table COLOURS
+--------------------------------------------------------
+
+  CREATE TABLE "ORDSDEMO"."COLOURS" 
+   (	"COLOUR_NAME" VARCHAR2(10 BYTE), 
+	"MINIMUM_BRICKS_NEEDED" NUMBER(*,0)
+   ) SEGMENT CREATION DEFERRED 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  TABLESPACE "USERS";
+  GRANT SELECT ON "ORDSDEMO"."COLOURS" TO "DEVASCH";
