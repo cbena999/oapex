@@ -9,6 +9,7 @@
 @TABLES\DEPT.sql
 @TABLES\DEVORA_LOGGER.sql
 @TABLES\EMP.sql
+@TABLES\EMP2.sql
 @TABLES\TestCollection1.sql
 @TABLES\TestCollection11.sql
 @TABLES\TestCollection111.sql
@@ -26,6 +27,7 @@
 @DATA_TABLE\DEPT.sql
 @DATA_TABLE\DEVORA_LOGGER.sql
 @DATA_TABLE\EMP.sql
+@DATA_TABLE\EMP2.sql
 @DATA_TABLE\TestCollection1.sql
 @DATA_TABLE\TestCollection11.sql
 @DATA_TABLE\TestCollection111.sql

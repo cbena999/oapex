@@ -1,6 +1,7 @@
 DROP SEQUENCE "ORDSDEMO"."DEVORA_LOGGER_SEQUENCE$";
 DROP TABLE "ORDSDEMO"."DEPT" cascade constraints;
 DROP TABLE "ORDSDEMO"."EMP" cascade constraints;
+DROP TABLE "ORDSDEMO"."EMP2" cascade constraints;
 DROP TABLE "ORDSDEMO"."TestCollection1" cascade constraints;
 DROP TABLE "ORDSDEMO"."TestCollection11" cascade constraints;
 DROP TABLE "ORDSDEMO"."TestCollection111" cascade constraints;
