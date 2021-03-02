@@ -1,0 +1,8 @@
+REM INSERTING into CLARTECH.EDU_DEPARTAMENTOS
+SET DEFINE OFF;
+Insert into CLARTECH.EDU_DEPARTAMENTOS (DEPTO_ID,NOMBRE) values (6,'Recurso Humanos');
+Insert into CLARTECH.EDU_DEPARTAMENTOS (DEPTO_ID,NOMBRE) values (1,'Sistemas Informático');
+Insert into CLARTECH.EDU_DEPARTAMENTOS (DEPTO_ID,NOMBRE) values (2,'Negocios');
+Insert into CLARTECH.EDU_DEPARTAMENTOS (DEPTO_ID,NOMBRE) values (3,'Diseño Gráfico');
+Insert into CLARTECH.EDU_DEPARTAMENTOS (DEPTO_ID,NOMBRE) values (4,'Arte Plástica');
+Insert into CLARTECH.EDU_DEPARTAMENTOS (DEPTO_ID,NOMBRE) values (5,'Idiomas');
