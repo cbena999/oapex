@@ -26,26 +26,26 @@ create or replace package body devora_logger_pack$ as
  	   lv_app_page_name :=  'Wks: ' ||  lv_wk_name ||    ' -> App: ' || lv_app_id || ' - '|| lv_application_name ||  ' -> Page: '|| lv_app_page_id || ' : ' || lv_page_name; 
 	
        
-       insert into devora_logger$( 
-              id, 
-              curr_timestamp,  
-			  app_title, 
-			  app_user, 
+       insert into devora_logger$(
+              id,
+              curr_timestamp,
+			  app_title,
+			  app_user,
 			  app_session,
               back_trace,
-			  dbg_msg, 
-			  error_stack, 			  
+			  dbg_msg,
+			  error_stack,
 			  call_stack )
-       values(devora_logger_sequence$.nextval, 
-              current_timestamp, 
-              dbms_utility.format_error_backtrace, 
-			  dbms_utility.format_error_stack, 
-			  p_dbg_msg, 
-		      lv_app_page_name, 
-			  lv_app_user, 
-			  lv_app_session, 
-			  dbms_utility.format_call_stack); 
-      commit; 
+       values(devora_logger_sequence$.nextval,
+              current_timestamp,
+              lv_app_page_name,
+              lv_app_user,
+              lv_app_session,
+              dbms_utility.format_error_backtrace,
+			  p_dbg_msg,
+              dbms_utility.format_error_stack,  			  
+			  dbms_utility.format_call_stack);
+      commit;
     end log_msg; 
 end devora_logger_pack$; 
 /
