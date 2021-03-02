@@ -28,7 +28,7 @@ prompt APPLICATION 101 - POCSCRUDPLSQL_WS_SSL_JSON_COLLECTIONS
 -- Application Export:
 --   Application:     101
 --   Name:            POCSCRUDPLSQL_WS_SSL_JSON_COLLECTIONS
---   Date and Time:   20:54 Monday March 1, 2021
+--   Date and Time:   21:24 Monday March 1, 2021
 --   Exported By:     DEV01
 --   Flashback:       0
 --   Export Type:     Application Export
@@ -121,7 +121,7 @@ wwv_flow_api.create_flow(
 ,p_substitution_string_01=>'APP_NAME'
 ,p_substitution_value_01=>'app1'
 ,p_last_updated_by=>'DEV01'
-,p_last_upd_yyyymmddhh24miss=>'20210301204104'
+,p_last_upd_yyyymmddhh24miss=>'20210301212348'
 ,p_file_prefix => nvl(wwv_flow_application_install.get_static_app_file_prefix,'')
 ,p_files_version=>3
 ,p_ui_type_name => null
@@ -14568,7 +14568,7 @@ wwv_flow_api.create_page(
 ,p_autocomplete_on_off=>'OFF'
 ,p_page_template_options=>'#DEFAULT#'
 ,p_last_updated_by=>'DEV01'
-,p_last_upd_yyyymmddhh24miss=>'20210218134700'
+,p_last_upd_yyyymmddhh24miss=>'20210301211949'
 );
 wwv_flow_api.create_page_plug(
  p_id=>wwv_flow_api.id(7483294894010579)
@@ -14630,10 +14630,12 @@ wwv_flow_api.create_page_da_action(
 'begin',
 'select apex_web_service.make_rest_request(',
 '    p_url         => ''https://api.github.com/'',',
-'    p_http_method => ''GET'',',
-'    p_wallet_path => ''file:C:\working21\OraAPEX\windows\wallets0221\wall1'', p_wallet_pwd => ''CbmOra.2021'') into :P4_RESULT ',
+'    p_http_method => ''GET'') into :P4_RESULT ',
 '    from dual;',
-'',
+'/* ',
+',',
+'    p_wallet_path => ''file:C:\working21\OraAPEX\windows\wallets0221\wall1'', p_wallet_pwd => ''CbmOra.2021''',
+'*/',
 'end; '))
 ,p_attribute_03=>'P4_RESULT'
 ,p_attribute_04=>'N'
@@ -14653,7 +14655,7 @@ wwv_flow_api.create_page(
 ,p_autocomplete_on_off=>'OFF'
 ,p_page_template_options=>'#DEFAULT#'
 ,p_last_updated_by=>'DEV01'
-,p_last_upd_yyyymmddhh24miss=>'20210224122751'
+,p_last_upd_yyyymmddhh24miss=>'20210301212348'
 );
 wwv_flow_api.create_page_plug(
  p_id=>wwv_flow_api.id(7483751419010584)
@@ -14977,9 +14979,7 @@ wwv_flow_api.create_page_da_action(
 '    apex_debug.message(p_message => ''CBM => JSON_TABL.p1 antes del select make_rest_request'');    ',
 '    select  apex_web_service.make_rest_request(',
 '        p_url         => ''https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&limit=500'', ',
-'        p_http_method => ''GET'',',
-'        p_wallet_path => ''file:C:\working21\OraAPEX\windows\wallets0221\wall1'',',
-'        p_wallet_pwd => ''CbmOra.2021'' )  into lc_data    ',
+'        p_http_method => ''GET'')  into lc_data    ',
 '    from dual;',
 '',
 '     ',
@@ -15059,9 +15059,7 @@ wwv_flow_api.create_page_da_action(
 '',
 'select  apex_web_service.make_rest_request(',
 '    p_url         => ''https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&limit=100'', ',
-'    p_http_method => ''GET'',',
-'    p_wallet_path => ''file:C:\working21\OraAPEX\windows\wallets0221\wall1'',',
-'    p_wallet_pwd => ''CbmOra.2021'' )  into lc_data    ',
+'    p_http_method => ''GET'')  into lc_data    ',
 '    from dual;',
 '',
 '    apex_debug.message(p_message => ''Request httsp json Time: '' || extract( second from ( systimestamp - l_time ) )); ',
@@ -15250,9 +15248,7 @@ wwv_flow_api.create_page_da_action(
 '    ',
 '    select  apex_web_service.make_rest_request(',
 '    p_url         => ''https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&limit=500'', ',
-'    p_http_method => ''GET'',',
-'    p_wallet_path => ''file:C:\working21\OraAPEX\windows\wallets0221\wall1'',',
-'    p_wallet_pwd => ''CbmOra.2021'' )  into lc_data    ',
+'    p_http_method => ''GET'')  into lc_data    ',
 '    from dual; ',
 '    ',
 '    with eqdata as ( select e.id,     e.title,     e.mag',
@@ -15326,9 +15322,7 @@ wwv_flow_api.create_page_da_action(
 '    ',
 '    select  apex_web_service.make_rest_request(',
 '    p_url         => ''https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&limit=500'', ',
-'    p_http_method => ''GET'',',
-'    p_wallet_path => ''file:C:\working21\OraAPEX\windows\wallets0221\wall1'',',
-'    p_wallet_pwd => ''CbmOra.2021'' )  into lc_data    ',
+'    p_http_method => ''GET'')  into lc_data    ',
 '    from dual; ',
 '    ',
 '    with eqdata as ( select e.id,     e.title,     e.mag ',
