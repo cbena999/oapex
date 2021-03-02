@@ -1,3 +1,12 @@
+
+BEGIN
+  OAUTH.delete_client(
+    'cdepartments Oauth'
+    );
+  COMMIT;
+END;
+/
+
 BEGIN
 oauth.create_client(p_name => 'cdepartments Oauth',
 p_grant_type => 'client_credentials',
