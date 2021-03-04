@@ -28,13 +28,13 @@ prompt APPLICATION 101 - POCSCRUDPLSQL_WS_SSL_JSON_COLLECTIONS
 -- Application Export:
 --   Application:     101
 --   Name:            POCSCRUDPLSQL_WS_SSL_JSON_COLLECTIONS
---   Date and Time:   21:24 Monday March 1, 2021
+--   Date and Time:   20:57 Wednesday March 3, 2021
 --   Exported By:     DEV01
 --   Flashback:       0
 --   Export Type:     Application Export
 --     Pages:                     17
 --       Items:                   23
---       Processes:                7
+--       Processes:                8
 --       Regions:                 47
 --       Buttons:                 20
 --       Dynamic Actions:         28
@@ -121,7 +121,7 @@ wwv_flow_api.create_flow(
 ,p_substitution_string_01=>'APP_NAME'
 ,p_substitution_value_01=>'app1'
 ,p_last_updated_by=>'DEV01'
-,p_last_upd_yyyymmddhh24miss=>'20210301212348'
+,p_last_upd_yyyymmddhh24miss=>'20210303191747'
 ,p_file_prefix => nvl(wwv_flow_application_install.get_static_app_file_prefix,'')
 ,p_files_version=>3
 ,p_ui_type_name => null
@@ -12602,8 +12602,10 @@ wwv_flow_api.create_authentication(
 ,p_name=>'Application Express Accounts'
 ,p_scheme_type=>'NATIVE_APEX_ACCOUNTS'
 ,p_invalid_session_type=>'LOGIN'
+,p_cookie_name=>'SHARE_APPS_SAME_SESSION'
 ,p_use_secure_cookie_yn=>'N'
 ,p_ras_mode=>0
+,p_reference_id=>14374022845288211
 );
 end;
 /
@@ -20175,7 +20177,7 @@ wwv_flow_api.create_page(
 ,p_page_template_options=>'#DEFAULT#'
 ,p_page_is_public_y_n=>'Y'
 ,p_last_updated_by=>'DEV01'
-,p_last_upd_yyyymmddhh24miss=>'20210301130815'
+,p_last_upd_yyyymmddhh24miss=>'20210303081241'
 );
 wwv_flow_api.create_page_plug(
  p_id=>wwv_flow_api.id(9065294060029421)
@@ -20296,11 +20298,11 @@ wwv_flow_api.create_page_process(
 ,p_error_display_location=>'INLINE_IN_NOTIFICATION'
 );
 wwv_flow_api.create_page_process(
- p_id=>wwv_flow_api.id(9068473299029439)
-,p_process_sequence=>20
+ p_id=>wwv_flow_api.id(2420291309378337)
+,p_process_sequence=>30
 ,p_process_point=>'AFTER_SUBMIT'
 ,p_process_type=>'NATIVE_PLSQL'
-,p_process_name=>'Login'
+,p_process_name=>'custom login'
 ,p_process_sql_clob=>wwv_flow_string.join(wwv_flow_t_varchar2(
 'declare',
 'v_Result Boolean := False;',
@@ -20317,21 +20319,33 @@ wwv_flow_api.create_page_process(
 '        Owa_Util.Redirect_Url(''f?p=&APP_ID.:101:&SESSION.'');',
 '    End If;',
 '',
-'end;',
-'',
-'',
-''))
+'end;'))
 ,p_process_clob_language=>'PLSQL'
 ,p_error_display_location=>'INLINE_IN_NOTIFICATION'
 );
 wwv_flow_api.create_page_process(
  p_id=>wwv_flow_api.id(9069705139029441)
-,p_process_sequence=>30
+,p_process_sequence=>40
 ,p_process_point=>'AFTER_SUBMIT'
 ,p_process_type=>'NATIVE_SESSION_STATE'
 ,p_process_name=>'Clear Page(s) Cache'
 ,p_attribute_01=>'CLEAR_CACHE_CURRENT_PAGE'
 ,p_error_display_location=>'INLINE_IN_NOTIFICATION'
+);
+wwv_flow_api.create_page_process(
+ p_id=>wwv_flow_api.id(9068473299029439)
+,p_process_sequence=>50
+,p_process_point=>'AFTER_SUBMIT'
+,p_process_type=>'NATIVE_PLSQL'
+,p_process_name=>'Login'
+,p_process_sql_clob=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'apex_authentication.login(',
+'    p_username => :P9999_USERNAME,',
+'    p_password => :P9999_PASSWORD );',
+''))
+,p_process_clob_language=>'PLSQL'
+,p_error_display_location=>'INLINE_IN_NOTIFICATION'
+,p_process_when_type=>'NEVER'
 );
 wwv_flow_api.create_page_process(
  p_id=>wwv_flow_api.id(9069276115029441)
