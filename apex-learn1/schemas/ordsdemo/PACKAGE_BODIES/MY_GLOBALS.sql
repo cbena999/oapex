@@ -1,8 +1,4 @@
---------------------------------------------------------
---  DDL for Package Body MY_GLOBALS
---------------------------------------------------------
-
-create or replace PACKAGE BODY            "MY_GLOBALS"
+CREATE OR REPLACE PACKAGE BODY "MY_GLOBALS"
 IS
    PROCEDURE oauth_get_last_token
    IS
@@ -76,7 +72,7 @@ IS
 
         dbms_scheduler.enable('Call_PUTPOSTDepts_API_JOB');
     end;
-    
+
 PROCEDURE    GET_CLIENT_CREDENTIALS (pv_name IN user_ords_clients.name%TYPE,
                                                    pv_id_o OUT user_ords_clients.client_id%TYPE,
                                                    pv_secret_o OUT user_ords_clients.client_secret%TYPE)
@@ -100,7 +96,7 @@ FUNCTION CUSTOM_USER_AUTH2
  (
  P_USER_NAME IN VARCHAR2,
  P_PASSWORD IN  VARCHAR2
- ) 
+ )
  RETURN BOOLEAN AS
      V_USER_NAME  USER_VALIDATE.USER_NAME%TYPE;
      V_PASSWORD    USER_VALIDATE.PASSWORD%TYPE;
@@ -110,7 +106,7 @@ FUNCTION CUSTOM_USER_AUTH2
 
 IF P_USER_NAME IS NULL OR P_PASSWORD IS NULL THEN
  APEX_ERROR.ADD_ERROR (
-     p_message  => 'Ingresa Usuario y Contraseña.',
+     p_message  => 'Ingresa Usuario y ContraseÃ±a.',
      p_display_location => apex_error.c_inline_with_field_and_notif,
     p_page_item_name => 'P9999_PASSWORD');
         RETURN FALSE;
@@ -142,7 +138,7 @@ BEGIN
              APEX_ERROR.ADD_ERROR (
              p_message  => 'Usuario no existente',
              p_display_location => apex_error.c_inline_with_field,
-             p_page_item_name => 'P9999_PASSWORD');    
+             p_page_item_name => 'P9999_PASSWORD');
                 RETURN FALSE;
  END;
 
@@ -166,7 +162,6 @@ RETURN TRUE;
 
 END;
 
-
 FUNCTION in_list (p_in_list  IN  VARCHAR2)
   RETURN t_in_list_tab PIPELINED
 AS
@@ -183,6 +178,203 @@ BEGIN
   RETURN;
 END;
 
+PROCEDURE get_emp_json (p_empno IN emp.empno%TYPE DEFAULT NULL) AS
+  l_cursor SYS_REFCURSOR;
+  vint integer; 
+BEGIN
+  
+  OPEN l_cursor FOR
+    SELECT e.empno AS "empno",
+           e.ename AS "employee_name",
+           e.job AS "job",
+           e.mgr AS "mgr",
+           TO_CHAR(e.hiredate,'YYYY-MM-DD') AS "hiredate",
+           e.sal AS "sal",
+           e.comm  AS "comm",
+           e.deptno AS "deptno"
+    FROM   emp e
+    WHERE  e.empno = DECODE(p_empno, NULL, e.empno, p_empno);
+
+  APEX_JSON.open_object;
+  APEX_JSON.write('employees', l_cursor);
+  APEX_JSON.close_object;
+    -- vint := 1/0; 
+EXCEPTION
+  WHEN OTHERS THEN
+    devora_logger_pack$.log_msg ('EN get_emp_json :' , 's') ;
+    raise_application_error(-20001,'Custom msg ' || SQLCODE  || '--' || SQLERRM );
+
+
+END;
+
+PROCEDURE get_emp_xml (p_empno IN emp.empno%TYPE DEFAULT NULL) AS
+  l_clob CLOB;
+BEGIN
+
+  SELECT XMLELEMENT("employees",
+           XMLAGG(
+             XMLELEMENT("emp",
+               XMLFOREST(e.empno AS "empno",
+                         e.ename AS "employee_name",
+                         e.job AS "job",
+                         e.mgr AS "mgr",
+                         TO_CHAR(e.hiredate,'YYYY-MM-DD') AS "hiredate",
+                         e.sal AS "sal",
+                         e.comm  AS "comm",
+                         e.deptno AS "deptno"
+               )
+             )
+           )
+         ).getClobVal()
+  INTO   l_clob
+  FROM   emp e
+  WHERE  e.empno = DECODE(p_empno, NULL, e.empno, p_empno);
+
+  OWA_UTIL.mime_header('text/xml');  
+  HTP.print(l_clob);
+
+END;
+
+PROCEDURE create_employee (
+  p_empno     IN  emp.empno%TYPE,
+  p_ename     IN  emp.ename%TYPE,
+  p_job       IN  emp.job%TYPE,
+  p_mgr       IN  emp.mgr%TYPE,
+  p_hiredate  IN  VARCHAR2,
+  p_sal       IN  emp.sal%TYPE,
+  p_comm      IN  emp.comm%TYPE,
+  p_deptno    IN  emp.deptno%TYPE
+)
+AS
+BEGIN
+  INSERT INTO emp (empno, ename, job, mgr, hiredate, sal, comm, deptno)
+  VALUES (p_empno, p_ename, p_job, p_mgr, TO_DATE(p_hiredate, 'YYYY-MM-DD'), p_sal, p_comm, p_deptno);
+EXCEPTION
+  WHEN OTHERS THEN
+    HTP.print(SQLERRM);
+END;
+
+PROCEDURE amend_employee (
+  p_empno     IN  emp.empno%TYPE,
+  p_ename     IN  emp.ename%TYPE,
+  p_job       IN  emp.job%TYPE,
+  p_mgr       IN  emp.mgr%TYPE,
+  p_hiredate  IN  VARCHAR2,
+  p_sal       IN  emp.sal%TYPE,
+  p_comm      IN  emp.comm%TYPE,
+  p_deptno    IN  emp.deptno%TYPE
+)
+AS
+BEGIN
+  UPDATE emp
+  SET ename    = p_ename,
+      job      = p_job,
+      mgr      = p_mgr,
+      hiredate = TO_DATE(p_hiredate, 'YYYY-MM-DD'),
+      sal      = p_sal,
+      comm     = p_comm,
+      deptno   = p_deptno
+  WHERE empno  = p_empno;
+EXCEPTION
+  WHEN OTHERS THEN
+    HTP.print(SQLERRM);
+END;
+
+PROCEDURE remove_employee (
+  p_empno  IN  emp.empno%TYPE
+)
+AS
+BEGIN
+  DELETE FROM emp WHERE empno = p_empno;
+EXCEPTION
+  WHEN OTHERS THEN
+    HTP.print(SQLERRM);
+END;
+
+PROCEDURE create_departments_jsontable (p_data  IN  BLOB)
+AS
+vint number;
+BEGIN
+
+  INSERT INTO dept (deptno, dname)
+    SELECT *
+    FROM   json_table(p_data FORMAT JSON, '$.departments[*].department'
+           COLUMNS (
+             deptno  NUMBER   PATH '$.department_no',
+             dname   VARCHAR2 PATH '$.department_name'));
+
+  INSERT INTO emp (deptno, empno, ename, sal, hiredate)
+    SELECT j.*, SYSDATE AS hiredate
+    FROM   json_table(p_data FORMAT JSON, '$.departments[*].department'
+           COLUMNS (
+             deptno  NUMBER   PATH '$.department_no',
+             NESTED           PATH '$.employees[*]'
+               COLUMNS (
+                 empno  NUMBER    PATH '$.employee_number',
+                 ename  VARCHAR2  PATH '$.employee_name',
+                 sal    NUMBER    PATH '$.salary'))) j; 
+  COMMIT;
+--   vint := 1/0; 
+
+EXCEPTION
+  WHEN OTHERS THEN
+    devora_logger_pack$.log_msg ('EN create_departments_jsontable !:' || 'member_load ', 's') ;
+    raise_application_error(-20001,'Credit is too high' || SQLCODE  || '--' || SQLERRM );
+
+
+END;
+
+PROCEDURE create_departments_jsonobject (p_data  IN  BLOB)
+AS
+  TYPE t_dept_tab IS TABLE OF dept%ROWTYPE;
+  TYPE t_emp_tab  IS TABLE OF emp%ROWTYPE;
+
+  l_dept_tab     t_dept_tab := t_dept_tab();
+  l_emp_tab      t_emp_tab  := t_emp_tab();
+
+  l_top_obj      JSON_OBJECT_T;
+  l_dept_arr     JSON_ARRAY_T;
+  l_dept_obj     JSON_OBJECT_T;
+  l_emp_arr      JSON_ARRAY_T;
+  l_emp_obj      JSON_OBJECT_T;
+BEGIN
+
+  l_top_obj := JSON_OBJECT_T(p_data);
+
+  l_dept_arr := l_top_obj.get_array('departments');
+  
+  FOR i IN 0 .. l_dept_arr.get_size - 1 LOOP
+    l_dept_tab.extend;
+    l_dept_obj := TREAT(l_dept_arr.get(i) AS JSON_OBJECT_T).get_object('department');
+    l_dept_tab(l_dept_tab.last).deptno := l_dept_obj.get_number('department_no');
+    l_dept_tab(l_dept_tab.last).dname  := l_dept_obj.get_string('department_name');
+
+    l_emp_arr := l_dept_obj.get_array('employees');
+    FOR j IN 0 .. l_emp_arr.get_size - 1 LOOP
+      l_emp_obj := TREAT(l_emp_arr.get(j) AS JSON_OBJECT_T);
+
+      l_emp_tab.extend;
+      l_emp_tab(l_emp_tab.last).deptno   := l_dept_tab(l_dept_tab.last).deptno;
+      l_emp_tab(l_emp_tab.last).empno    := l_emp_obj.get_number('employee_number');
+      l_emp_tab(l_emp_tab.last).ename    := l_emp_obj.get_string('employee_name');
+      l_emp_tab(l_emp_tab.last).sal      := l_emp_obj.get_number('salary');
+      l_emp_tab(l_emp_tab.last).hiredate := SYSDATE;
+    END LOOP;
+  END LOOP;
+
+  -- Populate the tables.
+  FORALL i IN l_dept_tab.first .. l_dept_tab.last
+    INSERT INTO dept VALUES l_dept_tab(i);
+
+  FORALL i IN l_emp_tab.first .. l_emp_tab.last
+    INSERT INTO emp VALUES l_emp_tab(i);
+
+  COMMIT;
+
+EXCEPTION
+  WHEN OTHERS THEN
+    HTP.print(SQLERRM);
+END;
+
 END;
 /
-

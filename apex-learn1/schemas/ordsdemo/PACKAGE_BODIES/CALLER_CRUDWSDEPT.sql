@@ -1,8 +1,4 @@
---------------------------------------------------------
---  DDL for Package Body CALLER_CRUDWSDEPT
---------------------------------------------------------
-
-create or replace PACKAGE BODY            "CALLER_CRUDWSDEPT"
+CREATE OR REPLACE PACKAGE BODY "CALLER_CRUDWSDEPT"
 IS
 
    PROCEDURE ConsumeWS_HTTPS_JSON_TABLE_WITHAS_ADD_MEMBERSCOLL_BULK_COLLECT
@@ -107,7 +103,7 @@ IS
         -- Parse JSON data and extract data into collection
         apex_json.parse(lj_deps, lc_data);
         apex_collection.create_or_truncate_collection('CR-DEPTS');
-        -- vint := 1/0;
+        --vint := 1/0;
         FOR x IN 1 .. apex_json.get_count(p_path => 'items', p_values => lj_deps) LOOP
           apex_collection.add_member(p_collection_name => 'CR-DEPTS',
                p_n001            => apex_json.get_number(p_path     => 'items[%d].deptno',    p0 => x,   p_values => lj_deps),
@@ -137,7 +133,7 @@ IS
          -- 02 02 2021.
          -- Version PL/sql de Action: Execute Server - side Code.
           Items to Return: P15_PREV,P15_NEXT,P15_FIRST.  Se supone su scope es de sesion es de solo la pagina, y por eso si requiere se sigan especificando los campos en
-          "Items to Return" para que funcione la instrucciÃ³n  APEX_UTIL.SET_SESSION_STATE.
+          "Items to Return" para que funcione la instrucciÃƒÂ³n  APEX_UTIL.SET_SESSION_STATE.
           a diferencia de la variable: OAUTH_DEPT_TOKEN que fue definida en Shared Components / Application Logic / Aplication Items.
 
          -- version pl/sql enbebido en APEX.
@@ -161,12 +157,12 @@ IS
      When Others Then
         err_num := SQLCODE;
         err_msg := SQLERRM;
-        ordsdemo.devora_logger_pack$.log_msg ('p_dbg_msg !:' || 'member_load ' || p || '...' ||V('APP_SESSION')  || ORDSDEMO.my_globals.APIV2_URLWS_DEPTOS) ;
+        ordsdemo.devora_logger_pack$.log_msg ('p_dbg_msg !:' || 'member_load ' || p || '...' ||V('APP_SESSION')  || ORDSDEMO.my_globals.APIV2_URLWS_DEPTOS, 'a') ;
         APEX_UTIL.SET_SESSION_STATE('P15_MSG_ERROR', 'error: ' ||TO_CHAR(err_num) || err_msg);
 
        /*
         apex_error.add_error (
-        p_message => 'Call_GETDepts_API => provocado division por cero cachado y aÃ±adido mensaje usando apex_error.add_error,
+        p_message => 'Call_GETDepts_API => provocado division por cero cachado y aÃƒÂ±adido mensaje usando apex_error.add_error,
            pero en front se muestra como alert normal. Desde CS se llama como apex.event.trigger ',
         p_display_location => apex_error.c_on_error_page);
         */
@@ -197,7 +193,7 @@ IS
         dbms_output.put_line ('P4. OAUTH_DEPT_TOKEN no es null iniciara llamado a WSordsOauth2 PUT.');
         apex_debug.message(p_message => 'CBM =>P4. OAUTH_DEPT_TOKEN no es null iniciara llamado a WSordsOauth2 PUT.');
          -- Set Paramaters
-         -- vint := 1/0;
+         --vint := 1/0;
         apex_web_service.g_request_headers(1).name := 'Authorization';
         apex_web_service.g_request_headers(1).value := 'Bearer ' ||     NVL(OAUTH_DEPT_TOKEN, pOAUTH_DEPT_TOKEN);
         apex_web_service.g_request_headers(2).name := 'department_number';
@@ -229,7 +225,7 @@ IS
         END IF;
        /*
         apex_error.add_error (
-        p_message => 'Call_PUTPOSTDepts_API => provocado division por cero cachado y aÃ±adido mensaje usando apex_error.add_error,
+        p_message => 'Call_PUTPOSTDepts_API => provocado division por cero cachado y aÃƒÂ±adido mensaje usando apex_error.add_error,
            pero en front se muestra como alert normal. Desde CS se llama como apex.event.trigger ',
         p_display_location => apex_error.c_on_error_page);
        */
@@ -266,8 +262,6 @@ IS
 
   end if;
    END;
-
-
 
 END;
 /
